@@ -39,7 +39,7 @@ const selector = document.querySelector("#selector");
 const selectValue = document.querySelector(".select-value");
 
 // Audio
-const audioObj = new Audio(`/musica/${listMusic[0].name}.mp3`);
+const audioObj = new Audio(`./musica/${listMusic[0].name}.mp3`);
 
 
 
