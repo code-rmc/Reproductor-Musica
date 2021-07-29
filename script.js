@@ -48,7 +48,7 @@ const playMusic = (id) => {
     const music = listMusic.find(a => a.id == id);
 
     audioObj.pause();
-    audioObj.src = `/musica/${music.name}.mp3`;
+    audioObj.src = `./musica/${music.name}.mp3`;
     audioObj.play();
 
     title.textContent = music.name;
