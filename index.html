@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Musica</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.css">
+</head>
+
+<body>
+    <main>
+        <header class="menu">
+            <button class="button">
+                <span>
+                    <i class="fas fa-angle-left"></i>
+                </span>
+            </button>
+            <button class="menu-opc button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <section class="info-music">
+            <figure>
+                <img class="info-music-img" src="./img/Cowboy Bebop OST 3 Blue - Blue.jpg" alt=""
+                    style="width: 189px; height: 189px;">
+            </figure>
+            <h2>Reproductor de Musica</h2>
+            <p id="title">Cowboy Bebop OST 3 Blue - Blue</p>
+        </section>
+        <article class="music">
+            <section class="music-date">
+                <div id="container-progress">
+                    <div id="progress"></div>
+                </div>
+                <p id="date">0:00/5:08</p>
+            </section>
+            <section class="music-controls">
+                <div id="random" class="music-controls-button button">
+                    <i class="fas fa-random"></i>
+                </div>
+                <button id="back" class="music-controls-button button">
+                    <i class="fas fa-angle-double-left"></i>
+                </button>
+                <div id="play" class="music-controls-button button">
+                    <i class="fas fa-play"></i>
+                </div>
+                <button id="forward" class="music-controls-button button">
+                    <i class="fas fa-angle-double-right"></i>
+                </button>
+                <div id="infinity" class="music-controls-button button">
+                    <i class="fas fa-infinity"></i>
+                </div>
+            </section>
+            <section class="container-volumen">
+                <div class="container-volumen-icon">
+                    <span><i id="icon-volume" class="fas fa-volume-down"></i></span>
+                </div>
+                <div id="volumen">
+                    <input type="range" id="volume" value="50" min="0" max="100">
+                    <div id="selector">
+                        <div class="select-value"></div>
+                    </div>
+                </div>
+            </section>
+            <section class="music-list">
+                <ul id="music-list-menu">
+                </ul>
+            </section>
+        </article>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
