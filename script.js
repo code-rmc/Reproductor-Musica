@@ -13,6 +13,16 @@ const listMusic = [
         id: 2,
         name: "Skeler - Arcadia",
         duration: "0:42"
+    },
+    {
+        id: 3,
+        name: "Marshmello - Silence Artista",
+        duration: "0:32"
+    },
+    {
+        id: 4,
+        name: "song - song",
+        duration: "0:30"
     }
 ]
 
@@ -34,40 +44,54 @@ const duration = document.querySelector("#date");
 const containerProgress = document.querySelector("#container-progress");
 const progress = document.querySelector("#progress");
 
+// Volumen
 const iconVolume = document.querySelector("#icon-volume");
 const selector = document.querySelector("#selector");
 const selectValue = document.querySelector(".select-value");
 
 // Audio
 const audioObj = new Audio(`./musica/${listMusic[0].name}.mp3`);
+let actualSong = 0;
 
 
 
-// Play Musica
-const playMusic = (id) => {
-    const music = listMusic.find(a => a.id == id);
-
-    audioObj.pause();
-    audioObj.src = `./musica/${music.name}.mp3`;
-    audioObj.play();
-
-    title.textContent = music.name;
-    img.src = `./img/${music.name}.jpg`;
-
-    play.children[0].classList.replace('fa-play', 'fa-pause');
-};
 
 
 
 // Agregar Musica a la lista de HTML
-const still = () => {
+const presentPlay = () => {
     // Lista de Musica
     const listSongs = document.querySelectorAll(".music-list-song");
 
     listSongs.forEach((song, index) => {
         song.classList.remove("active");
         song.lastChild.textContent = listMusic[index].duration;
+
+        if (index == actualSong) {
+            song.lastChild.textContent = "Playing";
+        }
     });
+};
+
+// Play Musica
+const playMusic = (id) => {
+    if (actualSong != id) {
+        actualSong = id;
+
+        const music = listMusic.find(a => a.id == id);
+
+        audioObj.pause();
+        audioObj.src = `./musica/${music.name}.mp3`;
+        audioObj.play();
+
+        title.textContent = music.name;
+        img.src = `./img/${music.name}.jpg`;
+
+    } else {
+        audioObj.play();
+    }
+    presentPlay();
+    play.children[0].classList.replace('fa-play', 'fa-pause');
 };
 
 listMusic.forEach((music) => {
@@ -78,7 +102,7 @@ listMusic.forEach((music) => {
     menuListUl.appendChild(li);
 
     li.addEventListener("click", () => {
-        still();
+        presentPlay();
         li.classList.add("active");
         li.lastChild.textContent = "Playing";
         playMusic(music.id);
@@ -100,6 +124,11 @@ audioObj.addEventListener('timeupdate', () => {
     duration.textContent = `${format(musicMint)}:${format(musicSec)}/${format(durantMint)}:${format(durantSec)}`;
 
     progress.style.width = (audioObj.currentTime / audioObj.duration) * 100 + "%";
+
+    if (audioObj.ended) {
+        random.classList.contains("button-active") ? randomSong() :
+            actualSong == (listMusic.length - 1) ? playMusic(0) : playMusic(actualSong + 1);
+    }
 });
 
 // Barra de Progreso
@@ -116,8 +145,7 @@ play.addEventListener("click", () => {
         play.children[0].classList.replace('fa-pause', 'fa-play')
         audioObj.pause();
     } else {
-        audioObj.play();
-        play.children[0].classList.replace('fa-play', 'fa-pause');
+        playMusic(actualSong);
     }
 });
 
@@ -130,36 +158,47 @@ infinity.addEventListener("click", () => {
     infinity.classList.toggle("button-active");
 });
 
-random.addEventListener("click", () => {
-    random.classList.toggle("button-active");
-    let max = listMusic.length - 1;
+random.addEventListener("click", () => random.classList.toggle("button-active"));
+
+const randomSong = () => {
+    let max = listMusic.length;
+    console.log(max);
     let randNum = Math.floor(Math.random() * max);
-    playMusic(randNum)
-});
+    if (randNum === actualSong) {
+        randomSong();
+    } else {
+        playMusic(randNum);
+    }
+}
 
-
-
-volume.addEventListener("input", () => {
+// Volumen
+function inputValue() {
     let volumen = volume.value;
     audioObj.volume = (volumen / 100);
+    selectValue.innerText = volumen;
+    return volumen;
+};
+inputValue();
+
+volume.addEventListener("input", () => {
+
     selector.style.opacity = "1";
     selector.style.animation = "";
-    selectValue.innerText = volumen;
-    changeVolume(volumen);
+
+    changeVolume(inputValue());
 });
 
 volume.addEventListener("click", () => {
-    const animation1 = setInterval(() => {
-        selector.style.animation = "chalengeVolumeOutput 2s"
-    }, 100);
+    const animation1 = setInterval(() => selector.style.animation = "chalengeVolumeOutput 2s", 100);
     animation1;
     selector.style.opacity = "0";
 });
 
 const changeVolume = (volumen) => {
-    volumen == "0" ? iconVolume.classList.replace('fa-volume-down', 'fa-volume-mute') : iconVolume.classList.replace('fa-volume-mute', 'fa-volume-down');
+    volumen === "0" ? iconVolume.classList.replace('fa-volume-down', 'fa-volume-mute') : iconVolume.classList.replace('fa-volume-mute', 'fa-volume-down');
     audioObj.volume = (volumen / 100);
 };
 
-iconVolume.addEventListener("click", () => changeVolume("0"));
-
+iconVolume.addEventListener("click", () => {
+    iconVolume.classList.contains('fa-volume-mute') ? changeVolume(volume.value) : changeVolume("0");
+});
